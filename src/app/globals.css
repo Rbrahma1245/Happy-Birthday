@@ -701,3 +701,193 @@ html { scroll-behavior: smooth; }
   }
 }
 
+
+.birthday-typing-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: #e8799b;
+  animation: birthday-cursor-blink 0.7s step-end infinite;
+}
+@keyframes birthday-cursor-blink {
+  50% { opacity: 0; }
+}
+.birthday-ending-message {
+  max-width: 650px;
+  margin: 25px auto;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+@media (prefers-reduced-motion: reduce) {
+  .birthday-typing-cursor { animation: none; }
+}
+
+
+.birthday-typing-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: #e8799b;
+  animation: birthday-cursor-blink 0.7s step-end infinite;
+}
+@keyframes birthday-cursor-blink {
+  50% { opacity: 0; }
+}
+.birthday-ending-message {
+  max-width: 650px;
+  margin: 25px auto;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+@media (prefers-reduced-motion: reduce) {
+  .birthday-typing-cursor { animation: none; }
+}
+
+/* Center all animated text on desktop and mobile */
+.birthday-hero-inner.birthday-typing-center,
+.birthday-ending.birthday-typing-center {
+  text-align: center;
+}
+.birthday-typing-center .birthday-handwriting,
+.birthday-typing-center .birthday-hero-copy,
+.birthday-typing-center h1,
+.birthday-typing-center h2,
+.birthday-typing-center p,
+.birthday-typing-center > span {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.birthday-typing-center .birthday-hero-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.birthday-ending.birthday-typing-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.birthday-ending.birthday-typing-center h2,
+.birthday-ending.birthday-typing-center .birthday-ending-message {
+  width: 100%;
+  max-width: 680px;
+  text-align: center;
+}
+.birthday-ending.birthday-typing-center > span {
+  display: block;
+  max-width: 680px;
+  text-align: center;
+}
+.birthday-typing-center .birthday-typing-cursor {
+  white-space: nowrap;
+}
+
+
+/* Floating balloon background */
+.floating-balloons {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.floating-balloon {
+  position: absolute;
+  bottom: -180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: balloonFly 18s linear infinite;
+  opacity: 0.65;
+  will-change: transform;
+}
+
+.balloon-body {
+  position: relative;
+  aspect-ratio: 0.82;
+  border-radius: 50% 50% 45% 45%;
+  box-shadow:
+    inset -8px -10px 14px rgba(0, 0, 0, 0.08),
+    inset 5px 5px 12px rgba(255, 255, 255, 0.35);
+}
+
+.balloon-shine {
+  position: absolute;
+  top: 16%;
+  left: 20%;
+  width: 23%;
+  height: 35%;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  transform: rotate(30deg);
+  filter: blur(3px);
+}
+
+.balloon-knot {
+  width: 9px;
+  height: 9px;
+  margin-top: -1px;
+  background: rgba(180, 75, 95, 0.6);
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+}
+
+.balloon-string {
+  width: 1px;
+  height: 75px;
+  background: rgba(130, 90, 100, 0.45);
+  transform: rotate(5deg);
+}
+
+@keyframes balloonFly {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-7deg);
+  }
+
+  25% {
+    transform: translate3d(25px, -30vh, 0) rotate(5deg);
+  }
+
+  50% {
+    transform: translate3d(-20px, -65vh, 0) rotate(-5deg);
+  }
+
+  75% {
+    transform: translate3d(20px, -100vh, 0) rotate(7deg);
+  }
+
+  100% {
+    transform: translate3d(-10px, -150vh, 0) rotate(-7deg);
+  }
+}
+
+/* Keep website content above balloons */
+.birthday-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.birthday-hero-inner,
+.birthday-letter-card,
+.birthday-ending > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .floating-balloon {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-balloons {
+    display: none;
+  }
+}
+
+

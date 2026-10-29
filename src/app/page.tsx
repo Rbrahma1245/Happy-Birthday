@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { TouchEvent } from "react";
 import Image from "next/image";
 import confetti from "canvas-confetti";
+import FloatingBalloons from "../../components/FloatingBalloons";
 
 type Memory = {
   id: number;
@@ -30,12 +31,76 @@ const decorations = Array.from({ length: 26 }, (_, i) => ({
   size: `${13 + (i % 5) * 7}px`,
 }));
 
+
+// Types each message once, when the ending enters the viewport.
+function Typewriter({
+  text,
+  start,
+  speed = 55,
+  delay = 0,
+  className = "",
+}: {
+  text: string;
+  start: boolean;
+  speed?: number;
+  delay?: number;
+  className?: string;
+}) {
+  const [count, setCount] = useState(0);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (!start) return;
+    const timer = window.setTimeout(() => setReady(true), delay);
+    return () => window.clearTimeout(timer);
+  }, [start, delay]);
+
+  useEffect(() => {
+    if (!ready || count >= text.length) return;
+    const timer = window.setTimeout(() => setCount((n) => n + 1), speed);
+    return () => window.clearTimeout(timer);
+  }, [ready, count, text, speed]);
+
+  return (
+    <span className={className}>
+      {text.slice(0, count)}
+      {ready && count < text.length && (
+        <span className="birthday-typing-cursor" aria-hidden="true">|</span>
+      )}
+    </span>
+  );
+}
+
 export default function BirthdayPage() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [selectedMemory, setSelectedMemory] =
     useState<Memory | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [surpriseOpened, setSurpriseOpened] = useState(false);
+
+  const [showHero, setShowHero] = useState(false);
+  const [showEnding, setShowEnding] = useState(false);
+
+  useEffect(() => {
+    setShowHero(true);
+  }, []);
+  const endingRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const target = endingRef.current;
+    if (!target) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShowEnding(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const touchStart = useRef<number | null>(null);
@@ -251,6 +316,8 @@ export default function BirthdayPage() {
 
   return (
     <main className="birthday-page">
+      <FloatingBalloons />
+
       {/* Background music */}
       <audio
         ref={audioRef}
@@ -293,23 +360,44 @@ export default function BirthdayPage() {
           ✳
         </span>
 
-        <div className="birthday-hero-inner">
+        <div className="birthday-hero-inner birthday-typing-center">
           <div className="birthday-eyebrow">
             <span>✦</span> TODAY IS ALL ABOUT YOU <span>✦</span>
           </div>
 
           <p className="birthday-handwriting">
-            To my favorite person in the world,
+            <Typewriter
+              text="To my favorite person in the world,"
+              start={showHero}
+              speed={55}
+              delay={300}
+            />
           </p>
 
           <h1>
-            Happy Birthday <span>my love.</span>
+            <Typewriter
+              text="Happy Birthday "
+              start={showHero}
+              speed={75}
+              delay={2500}
+            />
+            <span>
+              <Typewriter
+                text="my love."
+                start={showHero}
+                speed={95}
+                delay={3650}
+              />
+            </span>
           </h1>
 
           <p className="birthday-hero-copy">
-            You make every ordinary moment feel like magic.
-            Here&apos;s a little corner of the universe,
-            made just to celebrate you.
+            <Typewriter
+              text="You make every ordinary moment feel like magic. Here's a little corner of the universe, made just to celebrate you."
+              start={showHero}
+              speed={28}
+              delay={4800}
+            />
           </p>
 
           <div className="birthday-hero-buttons">
@@ -323,10 +411,7 @@ export default function BirthdayPage() {
                 : "Open your surprise ✨"}
             </button>
 
-            <a
-              className="birthday-secondary"
-              href="#memories"
-            >
+            <a className="birthday-secondary" href="#memories">
               See our memories <span>↗</span>
             </a>
           </div>
@@ -561,17 +646,52 @@ export default function BirthdayPage() {
         </div>
       </section>
 
-      {/* Ending */}
-      <section className="birthday-ending">
-        <div className="birthday-ending-stars">
-          ✧ &nbsp; ♡ &nbsp; ✧
-        </div>
+            {/* Ending: romantic letter-by-letter animation */}
+      <section ref={endingRef} className="birthday-ending birthday-typing-center">
+        <div className="birthday-ending-stars">✧ &nbsp; ♡ &nbsp; ✧</div>
 
-        <p>one more thing...</p>
+        <p>
+          <Typewriter
+            text="one last thing, my love... ♡"
+            start={showEnding}
+            speed={65}
+          />
+        </p>
 
         <h2>
-          You are my favorite <em>everything.</em>
+          <Typewriter
+            text="In every lifetime,"
+            start={showEnding}
+            delay={2200}
+            speed={75}
+          />
+          <br />
+          <em>
+            <Typewriter
+              text="I'd still choose you. ♡"
+              start={showEnding}
+              delay={3800}
+              speed={80}
+            />
+          </em>
         </h2>
+
+        <p className="birthday-ending-message">
+          <Typewriter
+            text="You are my today, my tomorrow, and every beautiful dream in between."
+            start={showEnding}
+            delay={5900}
+            speed={40}
+          />
+          <br />
+          <br />
+          <Typewriter
+            text="No matter how many beautiful moments life gives me, you will always be my favorite one. ❤️"
+            start={showEnding}
+            delay={9000}
+            speed={40}
+          />
+        </p>
 
         <button
           type="button"
@@ -583,11 +703,16 @@ export default function BirthdayPage() {
         </button>
 
         <span>
-          Happy birthday, today and always.
+          <Typewriter
+            text="Happy Birthday, my favorite person. Forever and always. ♡"
+            start={showEnding}
+            delay={13200}
+            speed={50}
+          />
         </span>
       </section>
 
-      <footer className="birthday-footer">
+<footer className="birthday-footer">
         made with love, just for you · ♡
       </footer>
 

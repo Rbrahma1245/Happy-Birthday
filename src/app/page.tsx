@@ -13,7 +13,7 @@ type Memory = {
 };
 
 const memories: Memory[] = Array.from(
-  { length: 12 },
+  { length: 16 },
   (_, index) => ({
     id: index + 1,
     src: `/images/photo${index + 1}.jpg`,

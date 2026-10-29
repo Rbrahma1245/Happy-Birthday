@@ -1,0 +1,118 @@
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.*
+/.yarn/*
+!/.yarn/patches
+!/.yarn/plugins
+!/.yarn/releases
+!/.yarn/versions
+
+# Next.js build files
+/.next/
+/out/
+/build/
+/dist/
+
+# Production
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+/coverage/
+
+# Vercel
+.vercel
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+```
+
+### 2. Files that will be pushed to GitHub
+
+Your project should look something like this:
+
+```text
+birthday-website/
+├── app/
+│   ├── page.tsx
+│   ├── layout.tsx
+│   └── globals.css
+├── public/
+│   ├── images/
+│   │   ├── photo1.jpg
+│   │   ├── photo2.jpg
+│   │   └── ...photo12.jpg
+│   └── music/
+│       └── happy-birthday.mp3
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── next.config.ts
+├── tsconfig.json
+└── README.md
+```
+
+Your photos and music will be uploaded to GitHub because they're inside the `public` folder. Since this is a personal birthday website, remember that files committed to a public GitHub repository can be viewed or downloaded by others.
+
+### 3. Push your project to GitHub
+
+Open the terminal inside your project folder and run:
+
+```bash
+git init
+git add .
+git commit -m "Initial commit - Birthday Website"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/birthday-website.git
+git push -u origin main
+```
+
+Replace `YOUR_USERNAME` with your GitHub username and create an empty `birthday-website` repository on GitHub first.
+
+### 4. Verify `.gitignore` is working
+
+Before committing, run:
+
+```bash
+git status
+```
+
+Make sure `node_modules`, `.next`, and `.env` are not included.
+
+**Important:** If you previously added these files to Git, `.gitignore` alone won't untrack them. Run:
+
+```bash
+git rm -r --cached node_modules .next
+```
+
+Then commit again. If any environment secrets were previously pushed, remove them from Git history and rotate the exposed credentials.
+
+Once pushed, your Next.js birthday website will be ready to connect to Vercel for deployment.
